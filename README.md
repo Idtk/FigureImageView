@@ -1,9 +1,11 @@
 # FigureImageView
+<br>
 ## Introduction
-本类继承自ImageView，可以用于设置图片的形状，现有圆角、圆形、扇形、环形，四种可选方式。
+&nbsp;&nbsp;&nbsp;&nbsp;本类继承自ImageView，可以用于设置图片的形状，现有圆角、圆形、扇形、环形，四种可选方式。
 可以通过set或者xml来设置圆角的半径，以及扇形、环形样式的角度。
+<br>
 ## Version
-SdkVersion >= 19
+&nbsp;&nbsp;&nbsp;&nbsp;SdkVersion >= 19
 ## Usage
 ```Xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -51,7 +53,9 @@ SdkVersion >= 19
         app:angle="-120"/>
 </LinearLayout>
 ```
+<br>
 <img src="https://github.com/Idtk/FigureImageView/blob/master/image/FigureImageView.png" alt="FigureImageView" title="FigureImageView"/>
+<br>
 ## About
 **博客:www.idtkm.com**<br>
 **GitHub:https://github.com/Idtk**<br>
