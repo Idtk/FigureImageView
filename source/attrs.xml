@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="base_chart">
-        <attr name="attr1" format="string" />
-        <attr name="attr2" format="string"/>
-        <attr name="attr3" format="string"/>
-        <attr name="attr4" format="string"/>
-        <attr name="attr5" format="string"/>
-    </declare-styleable>
-    <attr name="base_chart_style" format="reference" />
-
-    <declare-styleable name="PieChart">
-        <attr name="name" format="string"/>
-        <attr name="percentDecimal" format="integer"/>
-        <attr name="textSize" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="FigureImageView">
         <attr name="mode" format="enum">
             <enum name="circle" value="0"/>
