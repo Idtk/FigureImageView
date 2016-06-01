@@ -2,13 +2,16 @@ package com.example.administrator.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -25,11 +28,16 @@ public class FigureImageView extends ImageView {
 
     private RectF rectF = new RectF();
     private Path mPath = new Path();
+    private Path mPath1 = new Path();
+    private Path mPath2 = new Path();
+    private Matrix matrix = new Matrix();
+    private Bitmap b;
 
     private int modeFlag = 0x00;
     private static final int CIRCLE = 0x00;
     private static final int ROUNDRECT = 0x01;
     private static final int SECTOR = 0x02;
+    private static final int RING = 0x03;
     private int radius = 50;
     private float angle = -120;
 
@@ -44,27 +52,27 @@ public class FigureImageView extends ImageView {
     public FigureImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FigureImageView, defStyleAttr,0);
-        int n = array.getIndexCount();
+        /*int n = array.getIndexCount();
         for (int i=0; i<n; i++){
-            int attr = array.getIndex(i);
-            switch (attr){
+            Log.d("TAG",i+":"+R.styleable.FigureImageView_mode+":"+R.styleable.FigureImageView_radius+":"+R.styleable.FigureImageView_angle);
+            switch (i){
                 case R.styleable.FigureImageView_mode:
-                    modeFlag = array.getInt(attr,modeFlag);
+                    modeFlag = array.getInt(i,modeFlag);
                     break;
                 case R.styleable.FigureImageView_radius:
-                    radius = array.getDimensionPixelSize(attr,radius);
+                    radius = array.getDimensionPixelSize(i,radius);
                     break;
                 case R.styleable.FigureImageView_angle:
-                    angle = array.getFloat(attr,angle);
+                    angle = array.getFloat(i,angle);
                     break;
             }
-        }
+        }*/
+        modeFlag = array.getInt(R.styleable.FigureImageView_mode,modeFlag);
+        radius = array.getDimensionPixelSize(R.styleable.FigureImageView_radius,radius);
+        angle = array.getFloat(R.styleable.FigureImageView_angle,angle);
         array.recycle();
-
         mPaint.setAntiAlias(true);
         mPaint.setFilterBitmap(true);
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        mPath.setFillType(Path.FillType.INVERSE_WINDING);
     }
 
     @Override
@@ -73,18 +81,41 @@ public class FigureImageView extends ImageView {
         mViewWidth = w;
         mViewHeight = h;
         size();
+        scaleBitmap();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //创建透明画布
-        int saveCount = canvas.saveLayerAlpha(0.0F, 0.0F, canvas.getWidth(), canvas.getHeight(),
-                255, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG);
-        super.onDraw(canvas);
+//        super.onDraw(canvas);
         canvas.translate(mViewWidth/2,mViewHeight/2);
-        canvas.drawPath(pathFigure(),mPaint);
+        canvas.clipPath(pathFigure(), Region.Op.INTERSECT);
         mPath.reset();
-        canvas.restoreToCount(saveCount);
+        canvas.drawBitmap(b,rect,rect,mPaint);
+
+    }
+
+
+    private void scaleBitmap(){
+
+        Drawable drawable = getDrawable();
+        if (drawable == null) {
+            return;
+        }
+        if (getWidth() == 0 || getHeight() == 0) {
+            return;
+        }
+        if (!(drawable instanceof BitmapDrawable)) {
+            return;
+        }
+        b = ((BitmapDrawable) drawable).getBitmap();
+        if (null == b) {
+            return;
+        }
+
+        float scaleWidth = length/b.getWidth();
+        float scaleHeight = length/b.getHeight();
+        matrix.postScale(scaleWidth,scaleHeight);
+        b=Bitmap.createBitmap(b,0,0,b.getWidth(),b.getHeight(),matrix,true);
     }
 
     protected void size(){
@@ -113,6 +144,21 @@ public class FigureImageView extends ImageView {
                 mPath.moveTo(0,length);
                 mPath.arcTo(rectF,angle,-angle*2-180);
                 break;
+            case RING:
+                rectF.left = -length*2;
+                rectF.top = -length;
+                rectF.right = length*2;
+                rectF.bottom = length*3;
+                mPath1.moveTo(0,length);
+                mPath1.arcTo(rectF,angle,-angle*2-180);
+
+                rectF.left = -length/2;
+                rectF.top = length/2;
+                rectF.right = length/2;
+                rectF.bottom = length*3/2;
+                mPath2.moveTo(0,length);
+                mPath2.arcTo(rectF,angle,-angle*2-180);
+                mPath.op(mPath1,mPath2, Path.Op.XOR);
         }
         return mPath;
     }
