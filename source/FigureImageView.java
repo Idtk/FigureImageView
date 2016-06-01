@@ -52,25 +52,23 @@ public class FigureImageView extends ImageView {
     public FigureImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FigureImageView, defStyleAttr,0);
-        /*int n = array.getIndexCount();
+        int n = array.getIndexCount();
         for (int i=0; i<n; i++){
-            Log.d("TAG",i+":"+R.styleable.FigureImageView_mode+":"+R.styleable.FigureImageView_radius+":"+R.styleable.FigureImageView_angle);
-            switch (i){
+            int attr = array.getIndex(i);
+            switch (attr){
                 case R.styleable.FigureImageView_mode:
-                    modeFlag = array.getInt(i,modeFlag);
+                    modeFlag = array.getInt(attr,modeFlag);
                     break;
                 case R.styleable.FigureImageView_radius:
-                    radius = array.getDimensionPixelSize(i,radius);
+                    radius = array.getDimensionPixelSize(attr,radius);
                     break;
                 case R.styleable.FigureImageView_angle:
-                    angle = array.getFloat(i,angle);
+                    angle = array.getFloat(attr,angle);
                     break;
             }
-        }*/
-        modeFlag = array.getInt(R.styleable.FigureImageView_mode,modeFlag);
-        radius = array.getDimensionPixelSize(R.styleable.FigureImageView_radius,radius);
-        angle = array.getFloat(R.styleable.FigureImageView_angle,angle);
+        }
         array.recycle();
+
         mPaint.setAntiAlias(true);
         mPaint.setFilterBitmap(true);
     }
