@@ -30,7 +30,7 @@ public class FigureImageView extends ImageView {
     private Path mPath2 = new Path();
     private Path mPath3 = new Path();
 
-    private int modeFlag = 0x03;
+    private int modeFlag = 0x00;
     private static final int CIRCLE = 0x00;
     private static final int ROUNDRECT = 0x01;
     private static final int SECTOR = 0x02;
