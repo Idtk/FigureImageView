@@ -27,8 +27,6 @@ public class FigureImageView extends ImageView {
     private RectF rectF = new RectF();
     private Path mPath = new Path();
     private Path mPath1 = new Path();
-    private Path mPath2 = new Path();
-    private Path mPath3 = new Path();
 
     private int modeFlag = 0x00;
     private static final int CIRCLE = 0x00;
@@ -130,12 +128,10 @@ public class FigureImageView extends ImageView {
                 rectF.top = length/2;
                 rectF.right = length/2;
                 rectF.bottom = length*3/2;
-                mPath2.moveTo(0,length);
-                mPath2.arcTo(rectF,angle,-angle*2-180);
+                mPath.moveTo(0,length);
+                mPath.arcTo(rectF,angle,-angle*2-180);
 
-                mPath.op(mPath1,mPath2, Path.Op.XOR);
-                mPath3.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CW);
-                mPath.op(mPath3, Path.Op.REVERSE_DIFFERENCE);
+                mPath.op(mPath1, Path.Op.XOR);
         }
         return mPath;
     }
