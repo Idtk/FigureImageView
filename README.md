@@ -55,6 +55,16 @@
 <br>
 <img src="https://github.com/Idtk/FigureImageView/blob/master/image/FigureImageView.png" alt="FigureImageView" title="FigureImageView"/>
 <br>
+
+## More
+```Java
+<attr name="length" format="dimension"/>
+public void setLength(float length) {
+    this.length = length;
+}
+```
+可用于设置显示图片区域的大小
+
 ## About
 **博客:www.idtkm.com**<br>
 **GitHub:https://github.com/Idtk**<br>
