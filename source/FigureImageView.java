@@ -68,6 +68,8 @@ public class FigureImageView extends ImageView {
         array.recycle();
         mPaint.setAntiAlias(true);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setStrokeWidth(0);
     }
 
     @Override
@@ -81,10 +83,10 @@ public class FigureImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         int saveCount = canvas.saveLayerAlpha(0.0F, 0.0F, canvas.getWidth(), canvas.getHeight(),
-                255, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG);
+                255, Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
         super.onDraw(canvas);
         canvas.translate(mViewWidth/2,mViewHeight/2);
-        mPath.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CCW);
+        mPath.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CW);
         canvas.drawPath(pathFigure(), mPaint);
         mPath.reset();
         canvas.restoreToCount(saveCount);
@@ -99,14 +101,14 @@ public class FigureImageView extends ImageView {
     protected Path pathFigure(){
         switch (modeFlag){
             case CIRCLE:
-                mPath.addCircle(0,0,length, Path.Direction.CW);
+                mPath.addCircle(0,0,length, Path.Direction.CCW);
                 break;
             case ROUNDRECT:
                 rectF.left = -length;
                 rectF.top = -length;
                 rectF.right = length;
                 rectF.bottom = length;
-                mPath.addRoundRect(rectF,radius,radius, Path.Direction.CW);
+                mPath.addRoundRect(rectF,radius,radius, Path.Direction.CCW);
                 break;
             case SECTOR:
                 rectF.left = -length*2;
@@ -115,6 +117,8 @@ public class FigureImageView extends ImageView {
                 rectF.bottom = length*3;
                 mPath.moveTo(0,length);
                 mPath.arcTo(rectF,angle,-angle*2-180);
+                mPath1.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CW);
+                mPath.op(mPath1, Path.Op.INTERSECT);
                 break;
             case RING:
                 rectF.left = -length*2;
