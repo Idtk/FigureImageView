@@ -9,5 +9,6 @@
         </attr>
         <attr name="radius" format="dimension"/>
         <attr name="angle" format="float"/>
+        <attr name="length" format="dimension"/>
     </declare-styleable>
 </resources>
