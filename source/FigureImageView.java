@@ -1,4 +1,4 @@
-package com.example.administrator.customview;
+package com.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,7 +13,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
- * Created by Administrator on 2016/5/29.
+ * Created by Idtk on 2016/5/29.
+ * blog : http://www.idtkm.com/
  */
 
 public class FigureImageView extends ImageView {
@@ -21,15 +22,19 @@ public class FigureImageView extends ImageView {
     protected int mViewWidth,mViewHeight;
     protected Paint mPaint = new Paint();
     protected Rect rect = new Rect();
-    protected float length;
+    protected float length = 0;
 
     private RectF rectF = new RectF();
     private Path mPath = new Path();
+    private Path mPath1 = new Path();
+    private Path mPath2 = new Path();
+    private Path mPath3 = new Path();
 
-    private int modeFlag = 0x00;
+    private int modeFlag = 0x03;
     private static final int CIRCLE = 0x00;
     private static final int ROUNDRECT = 0x01;
     private static final int SECTOR = 0x02;
+    private static final int RING = 0x03;
     private int radius = 50;
     private float angle = -120;
 
@@ -57,14 +62,14 @@ public class FigureImageView extends ImageView {
                 case R.styleable.FigureImageView_angle:
                     angle = array.getFloat(attr,angle);
                     break;
+                case R.styleable.FigureImageView_length:
+                    length = array.getDimensionPixelSize(attr,(int)length);
+                    break;
             }
         }
         array.recycle();
-
         mPaint.setAntiAlias(true);
-        mPaint.setFilterBitmap(true);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        mPath.setFillType(Path.FillType.INVERSE_WINDING);
     }
 
     @Override
@@ -77,18 +82,18 @@ public class FigureImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //创建透明画布
         int saveCount = canvas.saveLayerAlpha(0.0F, 0.0F, canvas.getWidth(), canvas.getHeight(),
                 255, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG);
         super.onDraw(canvas);
         canvas.translate(mViewWidth/2,mViewHeight/2);
-        canvas.drawPath(pathFigure(),mPaint);
+        mPath.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CCW);
+        canvas.drawPath(pathFigure(), mPaint);
         mPath.reset();
         canvas.restoreToCount(saveCount);
     }
 
     protected void size(){
-        length = Math.min(mViewWidth,mViewHeight)/2;
+        length = length==0 ? Math.min(mViewWidth,mViewHeight)/2:length;
         rect = new Rect(-(int) length, -(int) length, (int) length, (int) length);
         rectF = new RectF(-length, -length, length, length);
     }
@@ -113,6 +118,24 @@ public class FigureImageView extends ImageView {
                 mPath.moveTo(0,length);
                 mPath.arcTo(rectF,angle,-angle*2-180);
                 break;
+            case RING:
+                rectF.left = -length*2;
+                rectF.top = -length;
+                rectF.right = length*2;
+                rectF.bottom = length*3;
+                mPath1.moveTo(0,length);
+                mPath1.arcTo(rectF,angle,-angle*2-180);
+
+                rectF.left = -length/2;
+                rectF.top = length/2;
+                rectF.right = length/2;
+                rectF.bottom = length*3/2;
+                mPath2.moveTo(0,length);
+                mPath2.arcTo(rectF,angle,-angle*2-180);
+
+                mPath.op(mPath1,mPath2, Path.Op.XOR);
+                mPath3.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CW);
+                mPath.op(mPath3, Path.Op.REVERSE_DIFFERENCE);
         }
         return mPath;
     }
@@ -127,5 +150,9 @@ public class FigureImageView extends ImageView {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public void setLength(float length) {
+        this.length = length;
     }
 }
