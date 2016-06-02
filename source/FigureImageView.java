@@ -75,8 +75,8 @@ public class FigureImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w-getPaddingLeft()-getPaddingRight();
-        mViewHeight = h-getPaddingTop()-getPaddingBottom();
+        mViewWidth = w+1;
+        mViewHeight = h+1;
         size();
     }
 
@@ -117,7 +117,7 @@ public class FigureImageView extends ImageView {
                 rectF.bottom = length*3;
                 mPath.moveTo(0,length);
                 mPath.arcTo(rectF,angle,-angle*2-180);
-                mPath1.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CW);
+                mPath1.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CCW);
                 mPath.op(mPath1, Path.Op.INTERSECT);
                 break;
             case RING:
