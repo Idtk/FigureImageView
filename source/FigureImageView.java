@@ -75,8 +75,8 @@ public class FigureImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w;
-        mViewHeight = h;
+        mViewWidth = w-getPaddingLeft()-getPaddingRight();
+        mViewHeight = h-getPaddingTop()-getPaddingBottom();
         size();
     }
 
