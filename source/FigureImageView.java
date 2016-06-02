@@ -63,7 +63,7 @@ public class FigureImageView extends ImageView {
                     angle = array.getFloat(attr,angle);
                     break;
                 case R.styleable.FigureImageView_length:
-                    length = array.getDimensionPixelSize(attr,(int)length);
+                    length = array.getDimensionPixelSize(attr,(int)length)*2;
                     break;
             }
         }
