@@ -111,6 +111,7 @@ public class FigureImageView extends ImageView {
                 mPath.addRoundRect(rectF,radius,radius, Path.Direction.CCW);
                 break;
             case SECTOR:
+                mPath1.reset();
                 rectF.left = -length*2;
                 rectF.top = -length;
                 rectF.right = length*2;
@@ -122,6 +123,7 @@ public class FigureImageView extends ImageView {
                 mPath1.reset();
                 break;
             case RING:
+                mPath1.reset();
                 rectF.left = -length*2;
                 rectF.top = -length;
                 rectF.right = length*2;
