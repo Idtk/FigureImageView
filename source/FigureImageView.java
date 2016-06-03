@@ -119,6 +119,7 @@ public class FigureImageView extends ImageView {
                 mPath.arcTo(rectF,angle,-angle*2-180);
                 mPath1.addRect(-mViewWidth/2,-mViewHeight/2,mViewWidth/2,mViewHeight/2, Path.Direction.CCW);
                 mPath.op(mPath1, Path.Op.INTERSECT);
+                mPath1.reset();
                 break;
             case RING:
                 rectF.left = -length*2;
@@ -136,6 +137,7 @@ public class FigureImageView extends ImageView {
                 mPath.arcTo(rectF,angle,-angle*2-180);
 
                 mPath.op(mPath1, Path.Op.XOR);
+                mPath1.reset();
         }
         return mPath;
     }
